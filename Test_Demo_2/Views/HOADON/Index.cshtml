@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Test_Demo_2.Models.HOA_DON>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-info mb-3">DANH SÁCH HÓA ĐƠN</h2>
+<p><a href="@Url.Action("Create","HOADON")" class="btn btn-primary">Thêm mới</a></p>
+
+
+<table class="table">
+    <tr>
+        <th>
+            <lable>Mã hóa đơn</lable>
+        </th>
+        <th>
+            <lable>Mã cửa hàng</lable>
+        </th>
+        <th>
+            <lable>Địa chỉ cửa hàng</lable>
+        </th>
+        <th>
+            <lable>Ngày giao dịch</lable>
+        </th>
+        <th><lable>Chức năng</lable></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MA_HOA_DON)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MA_CUA_HANG)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CUA_HANG.DIA_CHI)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NGAY_GIAO_DICH)
+            </td>
+            <td>
+                <a href="@Url.Action("Create","THONGTINBANHANG",new { id = item.MA_HOA_DON, mach = item.MA_CUA_HANG } )" class="btn btn-outline-info">Thêm</a> |
+                <a href="@Url.Action("Index","THONGTINBANHANG",new { id = item.MA_HOA_DON } )" class="btn btn-outline-behance">Chi tiết</a> |
+                <a href="@Url.Action("Details","HOADON",new { id = item.MA_HOA_DON } )" class="btn btn-outline-success">Xuất</a> |
+                <a href="@Url.Action("Delete","HOADON" , new { id = item.MA_HOA_DON })" class="btn btn-outline-danger">Xóa</a>
+            </td>
+        </tr>
+    }
+
+</table>
+

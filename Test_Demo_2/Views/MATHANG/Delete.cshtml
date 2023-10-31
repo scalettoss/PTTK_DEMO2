@@ -1,0 +1,35 @@
+﻿﻿@model Test_Demo_2.Models.MAT_HANG
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-danger mb-3 mx-3">XÓA MẶT HÀNG: @Html.DisplayFor(model => model.MA_MAT_HANG)</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal mx-3">
+        <dd>
+            <lable>Mã mặt hàng: <span class="mx-1 font-weight-bold mx-5">@Html.DisplayFor(model => model.MA_MAT_HANG)</span></lable>
+        </dd>
+        <dd>
+            <lable>Tên mặt hàng:<span class="mx-4 font-weight-bold mx-5">@Html.DisplayFor(model => model.TEN_MAT_HANG)</span></lable>
+        </dd>
+
+        <dd>
+            <lable>Đơn giá mặt hàng: <span class=" font-weight-bold mx-3"> @Html.DisplayFor(model => model.DON_GIA)</span></lable>
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color mx-3">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a href="@Url.Action("Index","MATHANG")" class="btn btn-primary">Quay lại</a>
+        </div>
+    }
+</div>

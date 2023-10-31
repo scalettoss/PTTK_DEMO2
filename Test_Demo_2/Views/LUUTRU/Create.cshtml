@@ -1,0 +1,48 @@
+﻿﻿@model Test_Demo_2.Models.LUU_TRU
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-info mb-3 mx-3">TẠO MỚI LƯU TRỮ</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <lable class="mx-3">Mã cửa hàng</lable>
+            <div class="col-md-10">
+                @Html.DropDownList("MA_CUA_HANG", null, htmlAttributes: new { @class = "form-control text-white" })
+                @Html.ValidationMessageFor(model => model.MA_CUA_HANG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <lable class="mx-3">Mã mặt hàng</lable>
+            <div class="col-md-10">
+                @Html.DropDownList("MA_MAT_HANG", null, htmlAttributes: new { @class = "form-control  text-white" })
+                @Html.ValidationMessageFor(model => model.MA_MAT_HANG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <lable class="mx-3">Số lượng</lable>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SO_LUONG_MAT_HANG, new { htmlAttributes = new { @class = "form-control text-white" } })
+                @Html.ValidationMessageFor(model => model.SO_LUONG_MAT_HANG, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success btn-icon-text" /> |
+                <a href="@Url.Action("Index","LUUTRU")" class="btn btn-primary">Quay lại</a>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,21 @@
+﻿@model Test_Demo_2.Models.HOA_DON
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+
+<h2 class="text-danger mb-3 mx-3">XÓA HÓA ĐƠN: @Html.DisplayFor(model => model.MA_HOA_DON)</h2>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color mx-3">
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a href="@Url.Action("Index","HOADON")" class="btn btn-primary">Quay lại</a>
+</div>
+    }
+

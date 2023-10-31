@@ -1,0 +1,41 @@
+﻿﻿@model Test_Demo_2.Models.CUA_HANG
+
+@{
+    ViewBag.Title = "Chỉnh sửa cửa hàng";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-info mb-3 mx-3">CHỈNH SỬA CỬA HÀNG: @Html.DisplayFor(model => model.MA_CUA_HANG)</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.MA_CUA_HANG)
+        <div class="form-group">
+            <lable class="mx-3">Địa chỉ</lable>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DIA_CHI, new { htmlAttributes = new { @class = "form-control text-white" } })
+                @Html.ValidationMessageFor(model => model.DIA_CHI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <lable class="mx-3">Số điện thoại</lable>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SO_DIEN_THOAI, new { htmlAttributes = new { @class = "form-control text-white" } })
+                @Html.ValidationMessageFor(model => model.SO_DIEN_THOAI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" /> |
+                <a href="@Url.Action("Index","CUAHANG")" class="btn btn-primary">Quay lại</a>
+            </div>
+        </div>
+    </div>
+}

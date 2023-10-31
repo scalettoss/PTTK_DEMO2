@@ -1,0 +1,53 @@
+﻿@model Test_Demo_2.Models.THONG_TIN_BAN_HANG
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-info mb-3 mx-3">CHỈNH SỬA THÔNG TIN CHO: @Html.DisplayFor(model => model.MA_HOA_DON)</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.MA_HOA_DON)
+    <input type="hidden" id="selectedValue" name="selectedValue" />
+    <div class="form-group">
+        <lable class="mx-3">Tên mặt hàng</lable>
+        <div class="col-md-10">
+            @*@Html.DropDownListFor(model => model.MA_MAT_HANG, (SelectList)ViewBag.MA_MAT_HANG, htmlAttributes: new { @class = "form-control", @onchange = "handleDropDownChange(this)" })*@
+            @Html.DropDownListFor(model => model.MA_MAT_HANG, (SelectList)ViewBag.MA_MAT_HANG, htmlAttributes: new { @class = "form-control text-white", @onchange = "handleDropDownChange(this)" })
+            @Html.ValidationMessageFor(model => model.MA_MAT_HANG, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SO_LUONG_BAN_HANG, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SO_LUONG_BAN_HANG, new { htmlAttributes = new { @class = "form-control text-white" } })
+            @Html.ValidationMessageFor(model => model.SO_LUONG_BAN_HANG, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-success" /> |
+            <a href="@Url.Action("Index","THONGTINBANHANG", new { id = Model.MA_HOA_DON })" class="btn btn-primary">Quay lại</a>
+
+        </div>
+    </div>
+
+</div>
+}
+
+<script>
+    function handleDropDownChange(dropdown) {
+        var selectedValue = dropdown.value;
+        console.log(selectedValue);
+        document.getElementById("selectedValue").value = selectedValue;
+    }
+</script>

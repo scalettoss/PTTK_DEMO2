@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GiaoDichModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CUA_HANG">
+          <Key>
+            <PropertyRef Name="MA_CUA_HANG" />
+          </Key>
+          <Property Name="MA_CUA_HANG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="DIA_CHI" Type="nvarchar" MaxLength="50" />
+          <Property Name="SO_DIEN_THOAI" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="HOA_DON">
+          <Key>
+            <PropertyRef Name="MA_HOA_DON" />
+          </Key>
+          <Property Name="MA_HOA_DON" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MA_CUA_HANG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="TONG_TIEN" Type="money" />
+          <Property Name="NGAY_GIAO_DICH" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LUU_TRU">
+          <Key>
+            <PropertyRef Name="MA_CUA_HANG" />
+            <PropertyRef Name="MA_MAT_HANG" />
+          </Key>
+          <Property Name="MA_CUA_HANG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MA_MAT_HANG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SO_LUONG_MAT_HANG" Type="int" />
+        </EntityType>
+        <EntityType Name="MAT_HANG">
+          <Key>
+            <PropertyRef Name="MA_MAT_HANG" />
+          </Key>
+          <Property Name="MA_MAT_HANG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="TEN_MAT_HANG" Type="nvarchar" MaxLength="50" />
+          <Property Name="DON_GIA" Type="money" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="THONG_TIN_BAN_HANG">
+          <Key>
+            <PropertyRef Name="MA_MAT_HANG" />
+            <PropertyRef Name="MA_HOA_DON" />
+          </Key>
+          <Property Name="MA_MAT_HANG" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="MA_HOA_DON" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SO_LUONG_BAN_HANG" Type="int" />
+        </EntityType>
+        <Association Name="FK_HOA_DON_GIAO_DICH_CUA_HANG">
+          <End Role="CUA_HANG" Type="Self.CUA_HANG" Multiplicity="1" />
+          <End Role="HOA_DON" Type="Self.HOA_DON" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUA_HANG">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Principal>
+            <Dependent Role="HOA_DON">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LUU_TRU_LUU_TRU_MAT_HANG">
+          <End Role="MAT_HANG" Type="Self.MAT_HANG" Multiplicity="1" />
+          <End Role="LUU_TRU" Type="Self.LUU_TRU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MAT_HANG">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Principal>
+            <Dependent Role="LUU_TRU">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LUU_TRU_LUU_TRU2_CUA_HANG">
+          <End Role="CUA_HANG" Type="Self.CUA_HANG" Multiplicity="1" />
+          <End Role="LUU_TRU" Type="Self.LUU_TRU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUA_HANG">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Principal>
+            <Dependent Role="LUU_TRU">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_THONG_TI_THONG_TIN_HOA_DON">
+          <End Role="HOA_DON" Type="Self.HOA_DON" Multiplicity="1" />
+          <End Role="THONG_TIN_BAN_HANG" Type="Self.THONG_TIN_BAN_HANG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HOA_DON">
+              <PropertyRef Name="MA_HOA_DON" />
+            </Principal>
+            <Dependent Role="THONG_TIN_BAN_HANG">
+              <PropertyRef Name="MA_HOA_DON" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_THONG_TI_THONG_TIN_MAT_HANG">
+          <End Role="MAT_HANG" Type="Self.MAT_HANG" Multiplicity="1" />
+          <End Role="THONG_TIN_BAN_HANG" Type="Self.THONG_TIN_BAN_HANG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MAT_HANG">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Principal>
+            <Dependent Role="THONG_TIN_BAN_HANG">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GiaoDichModelStoreContainer">
+          <EntitySet Name="CUA_HANG" EntityType="Self.CUA_HANG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HOA_DON" EntityType="Self.HOA_DON" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LUU_TRU" EntityType="Self.LUU_TRU" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MAT_HANG" EntityType="Self.MAT_HANG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="THONG_TIN_BAN_HANG" EntityType="Self.THONG_TIN_BAN_HANG" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_HOA_DON_GIAO_DICH_CUA_HANG" Association="Self.FK_HOA_DON_GIAO_DICH_CUA_HANG">
+            <End Role="CUA_HANG" EntitySet="CUA_HANG" />
+            <End Role="HOA_DON" EntitySet="HOA_DON" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LUU_TRU_LUU_TRU_MAT_HANG" Association="Self.FK_LUU_TRU_LUU_TRU_MAT_HANG">
+            <End Role="MAT_HANG" EntitySet="MAT_HANG" />
+            <End Role="LUU_TRU" EntitySet="LUU_TRU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LUU_TRU_LUU_TRU2_CUA_HANG" Association="Self.FK_LUU_TRU_LUU_TRU2_CUA_HANG">
+            <End Role="CUA_HANG" EntitySet="CUA_HANG" />
+            <End Role="LUU_TRU" EntitySet="LUU_TRU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_THONG_TI_THONG_TIN_HOA_DON" Association="Self.FK_THONG_TI_THONG_TIN_HOA_DON">
+            <End Role="HOA_DON" EntitySet="HOA_DON" />
+            <End Role="THONG_TIN_BAN_HANG" EntitySet="THONG_TIN_BAN_HANG" />
+          </AssociationSet>
+          <AssociationSet Name="FK_THONG_TI_THONG_TIN_MAT_HANG" Association="Self.FK_THONG_TI_THONG_TIN_MAT_HANG">
+            <End Role="MAT_HANG" EntitySet="MAT_HANG" />
+            <End Role="THONG_TIN_BAN_HANG" EntitySet="THONG_TIN_BAN_HANG" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GiaoDichModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CUA_HANG">
+          <Key>
+            <PropertyRef Name="MA_CUA_HANG" />
+          </Key>
+          <Property Name="MA_CUA_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DIA_CHI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SO_DIEN_THOAI" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="HOA_DON" Relationship="Self.FK_HOA_DON_GIAO_DICH_CUA_HANG" FromRole="CUA_HANG" ToRole="HOA_DON" />
+          <NavigationProperty Name="LUU_TRU" Relationship="Self.FK_LUU_TRU_LUU_TRU2_CUA_HANG" FromRole="CUA_HANG" ToRole="LUU_TRU" />
+        </EntityType>
+        <EntityType Name="HOA_DON">
+          <Key>
+            <PropertyRef Name="MA_HOA_DON" />
+          </Key>
+          <Property Name="MA_HOA_DON" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MA_CUA_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TONG_TIEN" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="NGAY_GIAO_DICH" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="CUA_HANG" Relationship="Self.FK_HOA_DON_GIAO_DICH_CUA_HANG" FromRole="HOA_DON" ToRole="CUA_HANG" />
+          <NavigationProperty Name="THONG_TIN_BAN_HANG" Relationship="Self.FK_THONG_TI_THONG_TIN_HOA_DON" FromRole="HOA_DON" ToRole="THONG_TIN_BAN_HANG" />
+        </EntityType>
+        <EntityType Name="LUU_TRU">
+          <Key>
+            <PropertyRef Name="MA_CUA_HANG" />
+            <PropertyRef Name="MA_MAT_HANG" />
+          </Key>
+          <Property Name="MA_CUA_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MA_MAT_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SO_LUONG_MAT_HANG" Type="Int32" />
+          <NavigationProperty Name="CUA_HANG" Relationship="Self.FK_LUU_TRU_LUU_TRU2_CUA_HANG" FromRole="LUU_TRU" ToRole="CUA_HANG" />
+          <NavigationProperty Name="MAT_HANG" Relationship="Self.FK_LUU_TRU_LUU_TRU_MAT_HANG" FromRole="LUU_TRU" ToRole="MAT_HANG" />
+        </EntityType>
+        <EntityType Name="MAT_HANG">
+          <Key>
+            <PropertyRef Name="MA_MAT_HANG" />
+          </Key>
+          <Property Name="MA_MAT_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TEN_MAT_HANG" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DON_GIA" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="LUU_TRU" Relationship="Self.FK_LUU_TRU_LUU_TRU_MAT_HANG" FromRole="MAT_HANG" ToRole="LUU_TRU" />
+          <NavigationProperty Name="THONG_TIN_BAN_HANG" Relationship="Self.FK_THONG_TI_THONG_TIN_MAT_HANG" FromRole="MAT_HANG" ToRole="THONG_TIN_BAN_HANG" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="THONG_TIN_BAN_HANG">
+          <Key>
+            <PropertyRef Name="MA_MAT_HANG" />
+            <PropertyRef Name="MA_HOA_DON" />
+          </Key>
+          <Property Name="MA_MAT_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MA_HOA_DON" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SO_LUONG_BAN_HANG" Type="Int32" />
+          <NavigationProperty Name="HOA_DON" Relationship="Self.FK_THONG_TI_THONG_TIN_HOA_DON" FromRole="THONG_TIN_BAN_HANG" ToRole="HOA_DON" />
+          <NavigationProperty Name="MAT_HANG" Relationship="Self.FK_THONG_TI_THONG_TIN_MAT_HANG" FromRole="THONG_TIN_BAN_HANG" ToRole="MAT_HANG" />
+        </EntityType>
+        <Association Name="FK_HOA_DON_GIAO_DICH_CUA_HANG">
+          <End Role="CUA_HANG" Type="Self.CUA_HANG" Multiplicity="1" />
+          <End Role="HOA_DON" Type="Self.HOA_DON" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUA_HANG">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Principal>
+            <Dependent Role="HOA_DON">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LUU_TRU_LUU_TRU2_CUA_HANG">
+          <End Role="CUA_HANG" Type="Self.CUA_HANG" Multiplicity="1" />
+          <End Role="LUU_TRU" Type="Self.LUU_TRU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CUA_HANG">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Principal>
+            <Dependent Role="LUU_TRU">
+              <PropertyRef Name="MA_CUA_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_THONG_TI_THONG_TIN_HOA_DON">
+          <End Role="HOA_DON" Type="Self.HOA_DON" Multiplicity="1" />
+          <End Role="THONG_TIN_BAN_HANG" Type="Self.THONG_TIN_BAN_HANG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HOA_DON">
+              <PropertyRef Name="MA_HOA_DON" />
+            </Principal>
+            <Dependent Role="THONG_TIN_BAN_HANG">
+              <PropertyRef Name="MA_HOA_DON" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LUU_TRU_LUU_TRU_MAT_HANG">
+          <End Role="MAT_HANG" Type="Self.MAT_HANG" Multiplicity="1" />
+          <End Role="LUU_TRU" Type="Self.LUU_TRU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MAT_HANG">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Principal>
+            <Dependent Role="LUU_TRU">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_THONG_TI_THONG_TIN_MAT_HANG">
+          <End Role="MAT_HANG" Type="Self.MAT_HANG" Multiplicity="1" />
+          <End Role="THONG_TIN_BAN_HANG" Type="Self.THONG_TIN_BAN_HANG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MAT_HANG">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Principal>
+            <Dependent Role="THONG_TIN_BAN_HANG">
+              <PropertyRef Name="MA_MAT_HANG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GiaoDichEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CUA_HANG" EntityType="Self.CUA_HANG" />
+          <EntitySet Name="HOA_DON" EntityType="Self.HOA_DON" />
+          <EntitySet Name="LUU_TRU" EntityType="Self.LUU_TRU" />
+          <EntitySet Name="MAT_HANG" EntityType="Self.MAT_HANG" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="THONG_TIN_BAN_HANG" EntityType="Self.THONG_TIN_BAN_HANG" />
+          <AssociationSet Name="FK_HOA_DON_GIAO_DICH_CUA_HANG" Association="Self.FK_HOA_DON_GIAO_DICH_CUA_HANG">
+            <End Role="CUA_HANG" EntitySet="CUA_HANG" />
+            <End Role="HOA_DON" EntitySet="HOA_DON" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LUU_TRU_LUU_TRU2_CUA_HANG" Association="Self.FK_LUU_TRU_LUU_TRU2_CUA_HANG">
+            <End Role="CUA_HANG" EntitySet="CUA_HANG" />
+            <End Role="LUU_TRU" EntitySet="LUU_TRU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_THONG_TI_THONG_TIN_HOA_DON" Association="Self.FK_THONG_TI_THONG_TIN_HOA_DON">
+            <End Role="HOA_DON" EntitySet="HOA_DON" />
+            <End Role="THONG_TIN_BAN_HANG" EntitySet="THONG_TIN_BAN_HANG" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LUU_TRU_LUU_TRU_MAT_HANG" Association="Self.FK_LUU_TRU_LUU_TRU_MAT_HANG">
+            <End Role="MAT_HANG" EntitySet="MAT_HANG" />
+            <End Role="LUU_TRU" EntitySet="LUU_TRU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_THONG_TI_THONG_TIN_MAT_HANG" Association="Self.FK_THONG_TI_THONG_TIN_MAT_HANG">
+            <End Role="MAT_HANG" EntitySet="MAT_HANG" />
+            <End Role="THONG_TIN_BAN_HANG" EntitySet="THONG_TIN_BAN_HANG" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GiaoDichModelStoreContainer" CdmEntityContainer="GiaoDichEntities">
+          <EntitySetMapping Name="CUA_HANG">
+            <EntityTypeMapping TypeName="GiaoDichModel.CUA_HANG">
+              <MappingFragment StoreEntitySet="CUA_HANG">
+                <ScalarProperty Name="MA_CUA_HANG" ColumnName="MA_CUA_HANG" />
+                <ScalarProperty Name="DIA_CHI" ColumnName="DIA_CHI" />
+                <ScalarProperty Name="SO_DIEN_THOAI" ColumnName="SO_DIEN_THOAI" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HOA_DON">
+            <EntityTypeMapping TypeName="GiaoDichModel.HOA_DON">
+              <MappingFragment StoreEntitySet="HOA_DON">
+                <ScalarProperty Name="MA_HOA_DON" ColumnName="MA_HOA_DON" />
+                <ScalarProperty Name="MA_CUA_HANG" ColumnName="MA_CUA_HANG" />
+                <ScalarProperty Name="TONG_TIEN" ColumnName="TONG_TIEN" />
+                <ScalarProperty Name="NGAY_GIAO_DICH" ColumnName="NGAY_GIAO_DICH" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LUU_TRU">
+            <EntityTypeMapping TypeName="GiaoDichModel.LUU_TRU">
+              <MappingFragment StoreEntitySet="LUU_TRU">
+                <ScalarProperty Name="MA_CUA_HANG" ColumnName="MA_CUA_HANG" />
+                <ScalarProperty Name="MA_MAT_HANG" ColumnName="MA_MAT_HANG" />
+                <ScalarProperty Name="SO_LUONG_MAT_HANG" ColumnName="SO_LUONG_MAT_HANG" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MAT_HANG">
+            <EntityTypeMapping TypeName="GiaoDichModel.MAT_HANG">
+              <MappingFragment StoreEntitySet="MAT_HANG">
+                <ScalarProperty Name="MA_MAT_HANG" ColumnName="MA_MAT_HANG" />
+                <ScalarProperty Name="TEN_MAT_HANG" ColumnName="TEN_MAT_HANG" />
+                <ScalarProperty Name="DON_GIA" ColumnName="DON_GIA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GiaoDichModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="THONG_TIN_BAN_HANG">
+            <EntityTypeMapping TypeName="GiaoDichModel.THONG_TIN_BAN_HANG">
+              <MappingFragment StoreEntitySet="THONG_TIN_BAN_HANG">
+                <ScalarProperty Name="MA_MAT_HANG" ColumnName="MA_MAT_HANG" />
+                <ScalarProperty Name="MA_HOA_DON" ColumnName="MA_HOA_DON" />
+                <ScalarProperty Name="SO_LUONG_BAN_HANG" ColumnName="SO_LUONG_BAN_HANG" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

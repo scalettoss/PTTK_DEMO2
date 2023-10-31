@@ -1,0 +1,43 @@
+﻿@model Test_Demo_2.Models.THONG_TIN_BAN_HANG
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>THONG_TIN_BAN_HANG</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SO_LUONG_BAN_HANG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SO_LUONG_BAN_HANG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HOA_DON.MA_CUA_HANG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HOA_DON.MA_CUA_HANG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MAT_HANG.TEN_MAT_HANG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MAT_HANG.TEN_MAT_HANG)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

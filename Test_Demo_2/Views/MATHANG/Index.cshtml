@@ -1,0 +1,46 @@
+﻿﻿@model IEnumerable<Test_Demo_2.Models.MAT_HANG>
+
+@{
+    ViewBag.Title = "Quản lí mặt hàng";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-info mb-3">DANH SÁCH MẶT HÀNG</h2>
+<p><a href="@Url.Action("Create","MATHANG")" class="btn btn-primary">Thêm mới</a></p>
+<table class="table">
+    <tr>
+        <th>
+            <lable>Mã mặt hàng</lable>
+        </th>
+        <th>
+            <lable>Tên mặt hàng</lable>
+        </th>
+        <th>
+            <lable>Đơn giá</lable>
+        </th>
+        <th>
+            <lable>Chức năng</lable>
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MA_MAT_HANG)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TEN_MAT_HANG)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DON_GIA)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit","MATHANG", new { id = item.MA_MAT_HANG })" class="btn-sm btn-info">Edit</a> |
+                <a href="@Url.Action("Details","MATHANG", new { id = item.MA_MAT_HANG })" class="btn-sm btn-warning">Details</a> |
+                <a href="@Url.Action("Delete","MATHANG", new { id = item.MA_MAT_HANG })" class="btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>

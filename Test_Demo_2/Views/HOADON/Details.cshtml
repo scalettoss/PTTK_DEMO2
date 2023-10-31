@@ -1,0 +1,103 @@
+﻿@model Test_Demo_2.Models.HOA_DON
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+<style>
+    .main-content
+    {
+        background-color: white;
+        height: 100vh;
+    }
+    p
+    {
+        font-size: 19px;
+    }
+    th lable 
+    {
+        color: black;
+    }
+    tr td
+    {
+        color: black;
+    }
+</style>
+<div class="main-content text-dark">
+    <div class="p-5">
+        <p style="font-size:19px">MÃ HÓA ĐƠN:....@Html.DisplayFor(model => model.MA_HOA_DON)..........</p>
+    </div>
+    <div>
+        <h2 class="text-center">HÓA ĐƠN MUA DỊCH VỤ</h2>
+    </div>
+    <div class="mt-2" style="margin-left: 350px";>
+        <p style="font-size:19px">Ngày Giao Dịch:...@Html.DisplayFor(model => model.NGAY_GIAO_DICH)..........</p>
+    </div>
+    <div class="pl-5 pt-3">
+        <p>Địa Chỉ:.......@Html.DisplayFor(model => model.CUA_HANG.DIA_CHI)..................................................</p>
+        <p>Số Điện Thoại:.........@Html.DisplayFor(model => model.CUA_HANG.SO_DIEN_THOAI)...................................</p>
+    </div>
+    <div class="pl-5 pr-5">
+        <table class="table">
+            <tr>
+                <th><lable>TÊN MẶT HÀNG</lable></th>
+                <th><lable>SỐ LƯỢNG</lable></th>
+                <th><lable>ĐƠN GIÁ</lable></th>
+                <th><lable>THÀNH TIỀN</lable></th>
+            </tr>
+            @for (var i = 0; i < ViewBag.TenMatHangs.Count; i++)
+            {
+                <tr>
+                    <td>@ViewBag.TenMatHangs[i]</td>
+                    <td>@ViewBag.SoLuongs[i]</td>
+                    <td>@ViewBag.dongia[i]</td>
+                    <td>
+                        @{
+                            decimal thanhtien = 0;
+                            thanhtien = ViewBag.SoLuongs[i] * ViewBag.dongia[i];
+                            @thanhtien
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="d-flex justify-content-end mt-4 ">
+        <span class="font-weight-bold mr-3">Tổng tiền:</span><input type="text" readonly name="name" value="@ViewBag.tthd"  style="border: none; width: 13%; font-weight: bold"/>
+    </div>
+    <div class="d-flex justify-content-end pr-5 mt-2 mr-4">
+        <p class="font-italic">Chữ kí xác nhận</p>
+        <p></p>
+    </div>
+</div>
+
+
+<div class="d-flex flex-column">
+    @*<lable>Mã cửa hàng: @Html.DisplayFor(model => model.CUA_HANG.MA_CUA_HANG)</lable>
+    <lable>Địa chỉ: @Html.DisplayFor(model => model.CUA_HANG.DIA_CHI)</lable>
+    <lable>Số điện thoại: @Html.DisplayFor(model => model.CUA_HANG.SO_DIEN_THOAI)</lable>
+    <lable>Mã hóa đơn: @Html.DisplayFor(model => model.MA_HOA_DON)</lable>
+    <lable>
+        Tên mặt hàng:
+            @foreach (var tenMatHang in ViewBag.TenMatHangs)
+                {
+                    @tenMatHang
+                }
+    </lable>
+    <lable>
+        Số lượng:
+        @foreach (var sl in ViewBag.SoLuongs)
+        {
+            @sl
+        }
+    </lable>
+    <lable>
+        Đơn giá:
+        @foreach (var dg in ViewBag.dongia)
+        {
+            @dg
+        }
+    </lable>
+    <lable>Thành tiền: @ViewBag.tthd</lable>
+    <lable>Ngày: @Html.DisplayFor(model => model.NGAY_GIAO_DICH)</lable>*@
+</div>

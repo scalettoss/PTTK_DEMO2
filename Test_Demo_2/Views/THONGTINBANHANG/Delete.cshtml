@@ -1,0 +1,38 @@
+﻿@model Test_Demo_2.Models.THONG_TIN_BAN_HANG
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+<h2 class="text-danger mb-3 mx-3">XÓA THÔNG TIN CỦA HÓA ĐƠN: @Html.DisplayFor(model => model.MA_HOA_DON)</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            <lable>Mã hóa đơn: <span class=" font-weight-bold">@Html.DisplayFor(model => model.MA_HOA_DON)</span></lable>
+        </dd>
+        <dd>
+            <lable>Mã cửa hàng: <span class="font-weight-bold">@Html.DisplayFor(model => model.HOA_DON.MA_CUA_HANG)</span></lable>
+        </dd>
+        <dd>
+            <lable>Mã mặt hàng: <span class="font-weight-bold">@Html.DisplayFor(model => model.MA_MAT_HANG)</span></lable>
+        </dd>
+        <dd>
+            <lable>Tên mặt hàng: <span class=" font-weight-bold">@Html.DisplayFor(model => model.MAT_HANG.TEN_MAT_HANG)</span></lable>
+        </dd>
+        <dd>
+            <lable>Số lượng bán: <span class=" font-weight-bold"> @Html.DisplayFor(model => model.SO_LUONG_BAN_HANG)</span></lable>
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    <a href="@Url.Action("Index","THONGTINBANHANG", new { id = Model.MA_HOA_DON })" class="btn btn-primary">Quay lại</a>
+</div>
+    }
+</div>
