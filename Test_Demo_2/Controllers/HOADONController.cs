@@ -28,7 +28,6 @@ namespace Test_Demo_2.Controllers
 
         public ActionResult Details(string id)
         {
-            string mmh = "MH01";
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

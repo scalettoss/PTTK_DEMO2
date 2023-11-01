@@ -67,6 +67,13 @@ namespace Test_Demo_2.Controllers
             {
                 if (soLuong >= tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG)
                 {
+                    var soluongconlai = soLuong - tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG;
+                    var luuTru = db.LUU_TRU.FirstOrDefault(lt => lt.MA_CUA_HANG == mach && lt.MA_MAT_HANG == selectedValue);
+                    if (luuTru != null)
+                    {
+                        luuTru.SO_LUONG_MAT_HANG = soluongconlai;
+                        db.SaveChanges();
+                    }
                     tHONG_TIN_BAN_HANG.MA_HOA_DON = id;
                     db.THONG_TIN_BAN_HANG.Add(tHONG_TIN_BAN_HANG);
                     db.SaveChanges();
@@ -160,6 +167,9 @@ namespace Test_Demo_2.Controllers
         public ActionResult DeleteConfirmed(string mamh, string mahd, string id)
         {
             THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG = db.THONG_TIN_BAN_HANG.Find(mamh, mahd);
+            var soLuongBanHang = tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG;
+            var luuTru = db.LUU_TRU.FirstOrDefault(lt => lt.MA_MAT_HANG == mamh);
+            luuTru.SO_LUONG_MAT_HANG += soLuongBanHang;
             db.THONG_TIN_BAN_HANG.Remove(tHONG_TIN_BAN_HANG);
             db.SaveChanges();
             return RedirectToAction("Index", new { id = id });
