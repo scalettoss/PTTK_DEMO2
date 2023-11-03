@@ -20,7 +20,6 @@ namespace Test_Demo_2.Controllers
             var hOA_DON = db.HOA_DON.Include(h => h.CUA_HANG);
             return View(hOA_DON.ToList());
         }
-
         // GET: HOADON
         // /Details/5
 
@@ -83,7 +82,7 @@ namespace Test_Demo_2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HOA_DON hOA_DON, THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG)
+        public ActionResult Create(HOA_DON hOA_DON, THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG, string selectedValue)
         {
             if (ModelState.IsValid)
             {
@@ -98,7 +97,8 @@ namespace Test_Demo_2.Controllers
                 hOA_DON.NGAY_GIAO_DICH = DateTime.Now;
                 db.HOA_DON.Add(hOA_DON);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["selectedValue"] = selectedValue;
+                return RedirectToAction("Create", "THONGTINBANHANG", new { mach = hOA_DON.MA_CUA_HANG, id = maHoaDon });
             }
             tHONG_TIN_BAN_HANG.MA_HOA_DON = hOA_DON.MA_HOA_DON;
             ViewBag.MA_CUA_HANG = new SelectList(db.CUA_HANG, "MA_CUA_HANG", "MA_CUA_HANG", hOA_DON.MA_CUA_HANG);

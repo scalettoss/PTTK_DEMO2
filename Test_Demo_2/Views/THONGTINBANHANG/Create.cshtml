@@ -1,45 +1,51 @@
-﻿@model Test_Demo_2.Models.THONG_TIN_BAN_HANG
+﻿﻿@model Test_Demo_2.Models.THONG_TIN_BAN_HANG
 
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/MyLayout.cshtml";
+    int count = 0;
 }
 <h2 class="text-info mb-3 mx-3">LỰA CHỌN MẶT HÀNG CẦN MUA: <label>@Html.DisplayFor(model => model.MA_HOA_DON)</label> </h2>
-@using (Html.BeginForm())
+
+@if(TempData["mess"] != null)
+            {
+                <div class="alert alert-warning">
+                    @TempData["mess"]
+                </div>
+            }    
+
+@using (Html.BeginForm("Create", "THONGTINBANHANG", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <input type="hidden" id="selectedValue" name="selectedValue" />
-    <div class="form-group">
-        <lable class="mx-3">Tên mặt hàng</lable>
-        <div class="col-md-10">
-            @*@Html.DropDownListFor(model => model.MA_MAT_HANG, (SelectList)ViewBag.MA_MAT_HANG, htmlAttributes: new { @class = "form-control", @onchange = "handleDropDownChange(this)" })*@
-            @Html.DropDownListFor(model => model.MA_MAT_HANG, (SelectList)ViewBag.MA_MAT_HANG, htmlAttributes: new { @class = "form-control text-white", @onchange = "handleDropDownChange(this)" })
-            @Html.ValidationMessageFor(model => model.MA_MAT_HANG, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.SO_LUONG_BAN_HANG, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.SO_LUONG_BAN_HANG, new { htmlAttributes = new { @class = "form-control text-white" } })
-            @Html.ValidationMessageFor(model => model.SO_LUONG_BAN_HANG, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    <table class="table">
+        <tr>
+            <th>Tên mặt hàng</th>
+            <th>Số lượng</th>
+        </tr>
+        @foreach (var item in (SelectList)ViewBag.MA_MAT_HANG)
+        {
+            if (item.Value != null)
+            {
+                count += 1;
+            }
+            <tr>
+                <td>@item.Text</td>
+                <td>
+                    <input type="number" name="SoLuong[]" class="form-control" />
+                </td>
+            </tr>
+        }
+    </table>
+    @Html.Hidden("count", count)
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-success" /> |
+            <input type="submit" value="Create" class="btn btn-success" />
             <a href="@Url.Action("Index","HOADON")" class="btn btn-primary">Quay lại</a>
         </div>
     </div>
 </div>
+
 }
-<script>
-    function handleDropDownChange(dropdown) {
-        var selectedValue = dropdown.value;
-        console.log(selectedValue);
-        document.getElementById("selectedValue").value = selectedValue;
-    }
-</script>

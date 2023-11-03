@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IdentityModel;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Mvc;
+using System.Windows.Forms;
 using Test_Demo_2.Models;
 namespace Test_Demo_2.Controllers
 {
@@ -45,48 +48,69 @@ namespace Test_Demo_2.Controllers
                              lt.MA_MAT_HANG,
                              mh.TEN_MAT_HANG
                          }).ToList();
-            items.Insert(0, new { MA_MAT_HANG = "", TEN_MAT_HANG = "Chọn mặt hàng" });
             ViewBag.MA_MAT_HANG = new SelectList(items, "MA_MAT_HANG", "TEN_MAT_HANG");
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG, string id, string mach, LUU_TRU Luu, string selectedValue)
+        public ActionResult Create(THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG, System.Web.Mvc.FormCollection form , string id, int count, List<int> SoLuong)
         {
-            var soLuong = db.LUU_TRU.FirstOrDefault(l => l.MA_CUA_HANG == mach && l.MA_MAT_HANG == selectedValue)?.SO_LUONG_MAT_HANG;
-            var items = (from lt in db.LUU_TRU
-                         join mh in db.MAT_HANG on lt.MA_MAT_HANG equals mh.MA_MAT_HANG
-                         where lt.MA_CUA_HANG == mach
-                         select new
-                         {
-                             lt.MA_MAT_HANG,
-                             mh.TEN_MAT_HANG
-                         }).ToList();
-            items.Insert(0, new { MA_MAT_HANG = "", TEN_MAT_HANG = "Chọn mặt hàng" });
-            if (ModelState.IsValid)
+            var selectedValue = TempData["selectedValue"]?.ToString();
+            var mach = selectedValue;
+            if (selectedValue != null)
             {
-                if (soLuong >= tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG)
+                var maMatHangs = (from lt in db.LUU_TRU
+                                  where lt.MA_CUA_HANG == mach
+                                  select lt.MA_MAT_HANG).ToList();
+                //select tat ca ma mat hàng của cửa hàng
+
+                if (ModelState.IsValid)
                 {
-                    var soluongconlai = soLuong - tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG;
-                    var luuTru = db.LUU_TRU.FirstOrDefault(lt => lt.MA_CUA_HANG == mach && lt.MA_MAT_HANG == selectedValue);
-                    if (luuTru != null)
+                    using (var transaction = db.Database.BeginTransaction())
                     {
-                        luuTru.SO_LUONG_MAT_HANG = soluongconlai;
-                        db.SaveChanges();
+                        try
+                        {
+                            for (int i = 0; i < maMatHangs.Count && i < SoLuong.Count; i++)
+                            {
+                                var ttbh = new THONG_TIN_BAN_HANG();
+                                ttbh.MA_MAT_HANG = maMatHangs[i];
+                                ttbh.MA_HOA_DON = id;
+                                ttbh.SO_LUONG_BAN_HANG = SoLuong[i];
+                                var slKho = (from lt in db.LUU_TRU
+                                             where lt.MA_CUA_HANG == mach && lt.MA_MAT_HANG == ttbh.MA_MAT_HANG
+                                             select lt.SO_LUONG_MAT_HANG).FirstOrDefault();
+
+                                if (slKho.HasValue && ttbh.SO_LUONG_BAN_HANG > slKho.Value)
+                                {
+                                    TempData["mess"] = $"KHÔNG ĐỦ SỐ LƯỢNG TRONG KHO - {ttbh.MA_MAT_HANG}";
+                                    transaction.Rollback(); // Rollback transaction to undo changes
+                                    return RedirectToAction("Create", "THONGTINBANHANG", new { mach = mach, id = id });
+                                }
+                                else
+                                {
+                                    db.THONG_TIN_BAN_HANG.Add(ttbh);
+                                    db.SaveChanges();
+                                }
+                            }
+                            transaction.Commit(); // Commit transaction to save changes
+                            return RedirectToAction("Index", new { id = id });
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback(); // Rollback transaction in case of any exception
+                            throw;
+                        }
                     }
-                    tHONG_TIN_BAN_HANG.MA_HOA_DON = id;
-                    db.THONG_TIN_BAN_HANG.Add(tHONG_TIN_BAN_HANG);
-                    db.SaveChanges();
-                    return RedirectToAction("Index", new { id = id });
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Không đủ số lượng trong kho");
                 }
             }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
+            }
+            //var soLuong = db.LUU_TRU.FirstOrDefault(l => l.MA_CUA_HANG == mach && l.MA_MAT_HANG == selectedValue)?.SO_LUONG_MAT_HANG;
             ViewBag.MA_HOA_DON = new SelectList(db.HOA_DON, "MA_HOA_DON", "MA_CUA_HANG", tHONG_TIN_BAN_HANG.MA_HOA_DON);
-            ViewBag.MA_MAT_HANG = new SelectList(items, "MA_MAT_HANG", "TEN_MAT_HANG", tHONG_TIN_BAN_HANG.MA_MAT_HANG);
+            //ViewBag.MA_MAT_HANG = new SelectList(, "MA_MAT_HANG", "TEN_MAT_HANG", tHONG_TIN_BAN_HANG.MA_MAT_HANG);
             return View(tHONG_TIN_BAN_HANG);
         }
 
@@ -174,6 +198,10 @@ namespace Test_Demo_2.Controllers
             db.SaveChanges();
             return RedirectToAction("Index", new { id = id });
         }
+
+
+
+
 
     }
 }

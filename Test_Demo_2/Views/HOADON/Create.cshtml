@@ -6,20 +6,20 @@
 }
 <h2 class="text-info mb-3 mx-3">TẠO MỚI HÓA ĐƠN</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "HOADON", FormMethod.Post, new { id = "myForm" }))
 {
     @Html.AntiForgeryToken()
-    
 <div class="form-horizontal">
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-<div class="form-group">
-    <lable class="mx-3">Mã cửa hàng</lable>
-    <div class="col-md-10">
-        @Html.DropDownList("MA_CUA_HANG", null, htmlAttributes: new { @class = "form-control text-white" })
-        @Html.ValidationMessageFor(model => model.MA_CUA_HANG, "", new { @class = "text-danger" })
+    <input type="hidden" id="selectedValue" name="selectedValue" />
+    <div class="form-group">
+        <lable class="mx-3">Mã cửa hàng</lable>
+        <div class="col-md-10">
+            @Html.DropDownList("MA_CUA_HANG", null, htmlAttributes: new { @class = "form-control text-white", @onchange = "handleDropDownChange(this)" })
+            @Html.ValidationMessageFor(model => model.MA_CUA_HANG, "", new { @class = "text-danger" })
+        </div>
     </div>
-</div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Create" class="btn btn-success" /> |
@@ -30,3 +30,11 @@
 </div>
 }
 
+
+<script>
+    function handleDropDownChange(dropdown) {
+        var selectedValue = dropdown.value;
+        console.log(selectedValue);
+        document.getElementById("selectedValue").value = selectedValue;
+    }
+</script>
