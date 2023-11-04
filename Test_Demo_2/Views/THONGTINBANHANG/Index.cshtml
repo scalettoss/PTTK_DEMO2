@@ -4,6 +4,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/MyLayout.cshtml";
     decimal Thanhtoan = 0;
+    var lastItem = Model.LastOrDefault();
 }
 <h2 class="text-info">THÔNG TIN CHI TIẾT</h2>
 
@@ -28,7 +29,7 @@
             <th>
                 <lable>Thành tiền</lable>
             </th>
-            <th>Chức năng</th>
+            <th><lable>Chức năng</lable></th>
         </tr>
 
         @foreach (var item in Model)
@@ -52,15 +53,14 @@
                         decimal tongTien = (decimal)(item.SO_LUONG_BAN_HANG * item.MAT_HANG.DON_GIA);
                         @tongTien
                         Thanhtoan += tongTien;
+                        TempData["TongTien"] = Thanhtoan;
                     }
                 </td>
                 <td>
-                    <a href="@Url.Action("Edit", "THONGTINBANHANG", new { mahd = item.HOA_DON.MA_HOA_DON, mamh = item.MAT_HANG.MA_MAT_HANG, id = item.MA_HOA_DON, mach = item.HOA_DON.MA_CUA_HANG })" class="btn-sm btn-info">Edit</a> |
-                    <a href="@Url.Action("Delete", "THONGTINBANHANG", new { mahd = item.HOA_DON.MA_HOA_DON, mamh = item.MAT_HANG.MA_MAT_HANG, id = item.MA_HOA_DON })" class="btn-sm btn-danger">Delete</a>
+                    <a href="@Url.Action("Delete", "THONGTINBANHANG", new { mahd = item.HOA_DON.MA_HOA_DON, mamh = item.MAT_HANG.MA_MAT_HANG, id = item.MA_HOA_DON, mach = item.HOA_DON.MA_CUA_HANG })" class="btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }
-
     </table>
 }
 
@@ -68,5 +68,10 @@
     <span class="font-weight-bold mr-3 text-info" style="font-size: 25px">Tổng: </span>
     <input type="text" readonly name="name" value="@Thanhtoan" class="form-control text-warning" style="width: 13%; font-size: 20px; background-color: #191c24; border: none" />
 </div>
-<a href="@Url.Action("Index","HOADON", new { thanhToan = Thanhtoan })" class="btn btn-success mb-4 mt-3">Xác nhận</a>
+@if (lastItem != null)
+{
+    <a href="@Url.Action("Index","HOADON", new { id = lastItem.HOA_DON.MA_HOA_DON })" class="btn btn-success mb-4 mt-3">Xác nhận</a>
+}
+<a href="@Url.Action("Index","HOADON")" class="btn btn-primary mb-4 mt-3">Quay lại</a>
+
 

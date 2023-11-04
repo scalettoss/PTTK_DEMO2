@@ -88,6 +88,11 @@ namespace Test_Demo_2.Controllers
                                 }
                                 else
                                 {
+                                    if (slKho.HasValue)
+                                    {
+                                        var kho = db.LUU_TRU.FirstOrDefault(lt => lt.MA_CUA_HANG == selectedValue && lt.MA_MAT_HANG == ttbh.MA_MAT_HANG);
+                                        kho.SO_LUONG_MAT_HANG -= ttbh.SO_LUONG_BAN_HANG;
+                                    }    
                                     db.THONG_TIN_BAN_HANG.Add(ttbh);
                                     db.SaveChanges();
                                 }
@@ -188,20 +193,20 @@ namespace Test_Demo_2.Controllers
         // POST: THONGTINBANHANG/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string mamh, string mahd, string id)
+        public ActionResult DeleteConfirmed(string mamh, string mahd, string mach)
         {
             THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG = db.THONG_TIN_BAN_HANG.Find(mamh, mahd);
-            var soLuongBanHang = tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG;
-            var luuTru = db.LUU_TRU.FirstOrDefault(lt => lt.MA_MAT_HANG == mamh);
-            luuTru.SO_LUONG_MAT_HANG += soLuongBanHang;
+            int soLuongBanHang = (int)tHONG_TIN_BAN_HANG.SO_LUONG_BAN_HANG;
+            string maCuaHang = mach;
+            LUU_TRU lt = db.LUU_TRU.FirstOrDefault(kh => kh.MA_CUA_HANG == maCuaHang && kh.MA_MAT_HANG == mamh);
+            if (lt != null)
+            {
+                lt.SO_LUONG_MAT_HANG += soLuongBanHang; // Cộng thêm số lượng mặt hàng vào kho
+                db.SaveChanges();
+            }
             db.THONG_TIN_BAN_HANG.Remove(tHONG_TIN_BAN_HANG);
             db.SaveChanges();
-            return RedirectToAction("Index", new { id = id });
+            return RedirectToAction("Index", new { id = mahd });
         }
-
-
-
-
-
     }
 }

@@ -3,14 +3,17 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/MyLayout.cshtml";
+    var lastItem = Model.LastOrDefault();
+
 }
 
-
-
 <h2 class="text-info mb-3">DANH SÁCH HÓA ĐƠN</h2>
-<p><a href="@Url.Action("Create","HOADON")" class="btn btn-primary">Thêm mới</a></p>
+<div>
+    <a href="@Url.Action("Create","HOADON")" class="btn btn-primary">Thêm mới</a> |
+    <a href="@Url.Action("ExportToExcel", "HOADON")" class="btn btn-success">Xuất Excel</a>
+</div>
 
-<table class="table" id="myTable">
+<table class="table mt-3" id="myTable">
     <tr>
         <th>
             <lable>Mã hóa đơn</lable>
@@ -24,6 +27,9 @@
         <th>
             <lable>Ngày giao dịch</lable>
         </th>
+        @*<th>
+                <lable>Tổng tiền</lable>
+            </th>*@
         <th><lable>Chức năng</lable></th>
     </tr>
     @foreach (var item in Model)
@@ -41,13 +47,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.NGAY_GIAO_DICH)
             </td>
+            @*<td>
+                    @{
+                        @TempData["TongTien"]
+                    }
+                </td>*@
             <td>
                 <a href="@Url.Action("Index","THONGTINBANHANG",new { id = item.MA_HOA_DON, macuhang = item.MA_CUA_HANG } )" class="btn btn-outline-behance">Chi tiết</a> |
-                <a href="@Url.Action("Details","HOADON",new { id = item.MA_HOA_DON } )" class="btn btn-outline-success">Xuất</a> |
-                <a href="@Url.Action("Delete","HOADON" , new { id = item.MA_HOA_DON })" class="btn btn-outline-danger">Xóa</a>
+                <a href="@Url.Action("Details","HOADON",new { id = item.MA_HOA_DON } )" class="btn btn-outline-success">Xuất hóa đơn</a> |
+                <a href="@Url.Action("Delete","HOADON" , new { id = item.MA_HOA_DON, mach = item.MA_CUA_HANG })" class="btn btn-outline-danger">Xóa hóa đơn</a>
             </td>
         </tr>
     }
 </table>
+
 
 
