@@ -8,6 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using Test_Demo_2.Models;
 using OfficeOpenXml;
+using System.Text;
+//EPPlus
+
+
+
 namespace Test_Demo_2.Controllers
 {
     public class HOADONController : Controller
@@ -15,25 +20,12 @@ namespace Test_Demo_2.Controllers
         private GiaoDichEntities db = new GiaoDichEntities();
 
         // GET: HOADON
-        public ActionResult Index(string id)
+        public ActionResult Index()
         {
-            var tongTien = (from ttbh in db.THONG_TIN_BAN_HANG
-                            join mh in db.MAT_HANG on ttbh.MA_MAT_HANG equals mh.MA_MAT_HANG
-                            where ttbh.MA_HOA_DON == id
-                            select ttbh.SO_LUONG_BAN_HANG * mh.DON_GIA).Sum();
-            var hoaDon = db.HOA_DON.FirstOrDefault(hd => hd.MA_HOA_DON == id);
-            if (hoaDon != null)
-            {
-                hoaDon.TONG_TIEN = tongTien;
-                db.SaveChanges();
-            }
-            var hOA_DON = db.HOA_DON.Include(h => h.CUA_HANG);
-            return View(hOA_DON.ToList());
+            return View(db.HOA_DON.ToList());
         }
         // GET: HOADON
         // /Details/5
-
-
 
         public ActionResult Details(string id)
         {
@@ -169,8 +161,9 @@ namespace Test_Demo_2.Controllers
         }
         public ActionResult ExportToExcel(string id)
         {
+            
             var hoaDonList = db.HOA_DON.ToList();
-            var  ttbh = db.THONG_TIN_BAN_HANG.ToList();
+            var thongTinBanHangList = db.THONG_TIN_BAN_HANG.ToList();
             byte[] fileContents;
             using (var package = new ExcelPackage())
             {
@@ -178,23 +171,44 @@ namespace Test_Demo_2.Controllers
                 // Tiêu đề cột
                 worksheet.Cells[1, 1].Value = "Mã hóa đơn";
                 worksheet.Cells[1, 2].Value = "Mã cửa hàng";
-                worksheet.Cells[1, 3].Value = "Ngày giao dịch";
-                worksheet.Cells[1, 4].Value = "Tổng tiền";
+                worksheet.Cells[1, 3].Value = "Địa chỉ";
+                worksheet.Cells[1, 4].Value = "Mã mặt hàng";
+                worksheet.Cells[1, 5].Value = "Ngày giao dịch";
+                worksheet.Cells[1, 6].Value = "Tổng tiền";
                 worksheet.Cells[1, 1].Style.Font.Bold = true;
                 worksheet.Cells[1, 2].Style.Font.Bold = true;
                 worksheet.Cells[1, 3].Style.Font.Bold = true;
                 worksheet.Cells[1, 4].Style.Font.Bold = true;
+                worksheet.Cells[1, 5].Style.Font.Bold = true;
+                worksheet.Cells[1, 6].Style.Font.Bold = true;
                 worksheet.Cells[1, 1, 1, 6].AutoFitColumns();
                 // Dữ liệu từ bảng HOA_DON
                 int row = 2;
                 foreach (var hoaDon in hoaDonList)
                 {
+                    var tongTien = (from ttbh in db.THONG_TIN_BAN_HANG
+                                    join mh in db.MAT_HANG on ttbh.MA_MAT_HANG equals mh.MA_MAT_HANG
+                                    where ttbh.MA_HOA_DON == hoaDon.MA_HOA_DON
+                                    select ttbh.SO_LUONG_BAN_HANG * mh.DON_GIA).Sum();
+
                     worksheet.Cells[row, 1].Value = hoaDon.MA_HOA_DON;
                     worksheet.Cells[row, 2].Value = hoaDon.MA_CUA_HANG;
+                    worksheet.Cells[row, 3].Value = hoaDon.CUA_HANG.DIA_CHI;
                     double excelDate = hoaDon.NGAY_GIAO_DICH.Value.ToOADate();
                     DateTime date = DateTime.FromOADate(excelDate);
-                    worksheet.Cells[row, 3].Value = date.ToString("HH:mm dd/MM/yyyy");
-                    worksheet.Cells[row, 4].Value = hoaDon.TONG_TIEN;
+                    worksheet.Cells[row, 5].Value = date.ToString("HH:mm dd/MM/yyyy");
+                    worksheet.Cells[row, 6].Value = tongTien;
+                    var tenMatHangBuilder = new StringBuilder();
+                    foreach (var thongTin in thongTinBanHangList.Where(t => t.MA_HOA_DON == hoaDon.MA_HOA_DON))
+                    {
+                        string mamathang = thongTin.MA_MAT_HANG;
+                        // Kết hợp tên mặt hàng vào chuỗi
+                        tenMatHangBuilder.Append(mamathang);
+                        tenMatHangBuilder.Append(", ");
+                    }
+                    string MatHangCombined = tenMatHangBuilder.ToString().TrimEnd(',', ' ');
+                    // Thêm giá trị kết hợp vào tệp Excel
+                    worksheet.Cells[row, 4].Value = MatHangCombined;
                     row++;
                 }
                 fileContents = package.GetAsByteArray();
