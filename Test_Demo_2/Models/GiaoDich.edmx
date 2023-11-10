@@ -19,7 +19,6 @@
           </Key>
           <Property Name="MA_HOA_DON" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="MA_CUA_HANG" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TONG_TIEN" Type="money" />
           <Property Name="NGAY_GIAO_DICH" Type="datetime" />
         </EntityType>
         <EntityType Name="LUU_TRU">
@@ -36,7 +35,7 @@
             <PropertyRef Name="MA_MAT_HANG" />
           </Key>
           <Property Name="MA_MAT_HANG" Type="varchar" MaxLength="10" Nullable="false" />
-          <Property Name="TEN_MAT_HANG" Type="nvarchar" MaxLength="50" />
+          <Property Name="TEN_MAT_HANG" Type="varchar" MaxLength="30" />
           <Property Name="DON_GIA" Type="money" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -167,7 +166,6 @@
           </Key>
           <Property Name="MA_HOA_DON" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="MA_CUA_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TONG_TIEN" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="NGAY_GIAO_DICH" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CUA_HANG" Relationship="Self.FK_HOA_DON_GIAO_DICH_CUA_HANG" FromRole="HOA_DON" ToRole="CUA_HANG" />
           <NavigationProperty Name="THONG_TIN_BAN_HANG" Relationship="Self.FK_THONG_TI_THONG_TIN_HOA_DON" FromRole="HOA_DON" ToRole="THONG_TIN_BAN_HANG" />
@@ -188,7 +186,7 @@
             <PropertyRef Name="MA_MAT_HANG" />
           </Key>
           <Property Name="MA_MAT_HANG" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="TEN_MAT_HANG" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TEN_MAT_HANG" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="DON_GIA" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="LUU_TRU" Relationship="Self.FK_LUU_TRU_LUU_TRU_MAT_HANG" FromRole="MAT_HANG" ToRole="LUU_TRU" />
           <NavigationProperty Name="THONG_TIN_BAN_HANG" Relationship="Self.FK_THONG_TI_THONG_TIN_MAT_HANG" FromRole="MAT_HANG" ToRole="THONG_TIN_BAN_HANG" />
@@ -322,7 +320,6 @@
               <MappingFragment StoreEntitySet="HOA_DON">
                 <ScalarProperty Name="MA_HOA_DON" ColumnName="MA_HOA_DON" />
                 <ScalarProperty Name="MA_CUA_HANG" ColumnName="MA_CUA_HANG" />
-                <ScalarProperty Name="TONG_TIEN" ColumnName="TONG_TIEN" />
                 <ScalarProperty Name="NGAY_GIAO_DICH" ColumnName="NGAY_GIAO_DICH" />
               </MappingFragment>
             </EntityTypeMapping>

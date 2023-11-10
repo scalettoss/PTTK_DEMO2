@@ -22,7 +22,6 @@ namespace Test_Demo_2.Models
     
         public string MA_HOA_DON { get; set; }
         public string MA_CUA_HANG { get; set; }
-        public Nullable<decimal> TONG_TIEN { get; set; }
         public Nullable<System.DateTime> NGAY_GIAO_DICH { get; set; }
     
         public virtual CUA_HANG CUA_HANG { get; set; }

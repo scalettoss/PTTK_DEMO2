@@ -343,8 +343,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\GiaoDich.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>GiaoDich.Context.cs</LastGenOutput>
       <DependentUpon>GiaoDich.edmx</DependentUpon>
+      <LastGenOutput>GiaoDich.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\GiaoDich.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -1125,13 +1125,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\GiaoDich.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>GiaoDich.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\GiaoDich.edmx.diagram">
-      <DependentUpon>GiaoDich.edmx</DependentUpon>
-    </Content>
     <Content Include="Public\assets\css\maps\style.css.map" />
     <Content Include="Public\assets\fonts\Assistant\Assistant-Bold.eot" />
     <Content Include="Public\assets\fonts\Assistant\Assistant-Bold.ttf" />
@@ -1261,6 +1254,13 @@
     <Content Include="Public\assets\vendors\mdi\fonts\materialdesignicons-webfont.ttf" />
     <Content Include="Public\assets\vendors\mdi\fonts\materialdesignicons-webfont.woff" />
     <Content Include="Public\assets\vendors\mdi\fonts\materialdesignicons-webfont.woff2" />
+    <EntityDeploy Include="Models\GiaoDich.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GiaoDich.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\GiaoDich.edmx.diagram">
+      <DependentUpon>GiaoDich.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

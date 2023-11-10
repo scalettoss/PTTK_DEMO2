@@ -55,12 +55,6 @@ namespace Test_Demo_2.Controllers
                           select mh.DON_GIA).ToList();
             ViewBag.dongia = donGia;
 
-            var tongTien = (from ttbh in db.THONG_TIN_BAN_HANG
-                            join mh in db.MAT_HANG on ttbh.MA_MAT_HANG equals mh.MA_MAT_HANG
-                            where ttbh.MA_HOA_DON == id
-                            select ttbh.SO_LUONG_BAN_HANG * mh.DON_GIA).Sum();
-            ViewBag.tthd = tongTien;
-            TempData["tongtien"] = tongTien;
             return View(hOA_DON);
         }
 
@@ -78,7 +72,7 @@ namespace Test_Demo_2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(HOA_DON hOA_DON, THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG, string selectedValue)
+        public ActionResult Create(HOA_DON hoadon, THONG_TIN_BAN_HANG tHONG_TIN_BAN_HANG, string selectedValue)
         {
             if (ModelState.IsValid)
             {
@@ -89,16 +83,16 @@ namespace Test_Demo_2.Controllers
                     maHoaDon = string.Format("HD{0:00}", currentNumber);
                     currentNumber++;
                 } while (db.HOA_DON.Any(hd => hd.MA_HOA_DON == maHoaDon));
-                hOA_DON.MA_HOA_DON = maHoaDon;
-                hOA_DON.NGAY_GIAO_DICH = DateTime.Now;
-                db.HOA_DON.Add(hOA_DON);
+                hoadon.MA_HOA_DON = maHoaDon;
+                hoadon.NGAY_GIAO_DICH = DateTime.Now;
+                db.HOA_DON.Add(hoadon);
                 db.SaveChanges();
                 TempData["selectedValue"] = selectedValue;
-                return RedirectToAction("Create", "THONGTINBANHANG", new { mach = hOA_DON.MA_CUA_HANG, id = maHoaDon });
+                return RedirectToAction("Create", "THONGTINBANHANG", new { mach = hoadon.MA_CUA_HANG, id = maHoaDon });
             }
-            tHONG_TIN_BAN_HANG.MA_HOA_DON = hOA_DON.MA_HOA_DON;
-            ViewBag.MA_CUA_HANG = new SelectList(db.CUA_HANG, "MA_CUA_HANG", "MA_CUA_HANG", hOA_DON.MA_CUA_HANG);
-            return View(hOA_DON);
+            tHONG_TIN_BAN_HANG.MA_HOA_DON = hoadon.MA_HOA_DON;
+            ViewBag.MA_CUA_HANG = new SelectList(db.CUA_HANG, "MA_CUA_HANG", "MA_CUA_HANG", hoadon.MA_CUA_HANG);
+            return View(hoadon);
         }
 
         // GET: HOADON/Edit/5
@@ -122,7 +116,7 @@ namespace Test_Demo_2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "MA_HOA_DON,MA_CUA_HANG,TONG_TIEN,NGAY_GIAO_DICH")] HOA_DON hOA_DON)
+        public ActionResult Edit(HOA_DON hOA_DON)
         {
             if (ModelState.IsValid)
             {
